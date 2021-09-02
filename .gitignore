@@ -1,2 +1,5 @@
 /venv
 .python-version
+/bu
+/images
+/.mypy_cache
