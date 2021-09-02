@@ -17,6 +17,7 @@ def main() -> int:
     parser.add_argument(
         '-q', '--quantity',
         help='# of stipples (int)',
+        type=int,
         default=1000,
     )
     parser.add_argument(
@@ -61,7 +62,7 @@ def main() -> int:
     QTY = args.quantity
     ITER = args.iterations
     RADIUS = args.radius
-    COLOR = 255
+    COLOR = 0
     RELAX = args.relax
     MAX_DISTANCE = args.max_distance
     MIN_DISTANCE = args.min_distance
@@ -76,7 +77,7 @@ def main() -> int:
         img = cv2.imread(IMAGE, 0)
         try:
             canvas = np.copy(img)
-            canvas[0:] = 0
+            canvas[0:] = 255
             return img, canvas
         except IndexError:
             raise SystemExit(f'Error loading image: {IMAGE}')
@@ -136,16 +137,14 @@ def main() -> int:
         """
         value = img[cY, cX]
         f = value / 255
-        p = (dC / MAX_DISTANCE)
-        # print(f'{f=}')
-        # print(f'{p=}')
-        # print('\n')
+        n = (dC - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE)
+
         if not OVERLAP and dC < MIN_DISTANCE:
             return True
 
-        if p < f**2:
+        if n < f**2:
             return True
-        elif p >= f**2:
+        elif n >= f**2:
             return False
         else:
             return None
